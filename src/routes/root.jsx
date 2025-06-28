@@ -92,7 +92,7 @@ const [drawerVisible,setDrawerVisible] = useState(false)
                             <Link to={"#"}><img className='w-7' src="search.png" alt='' /></Link>
                         </li>
                         <li>
-                            <Link to={"/products/:productsId"}><img className='w-7' src="cart.png" alt='' /></Link>
+                            <Link to={"/cart"}><img className='w-7' src="cart.png" alt='' /></Link>
                         </li>
                        
                     </ul>

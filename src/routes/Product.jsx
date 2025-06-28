@@ -10,18 +10,16 @@ export async function loader() {
     return { data }
 }
 
-function ProductPage(props) {
-    const { data } = useLoaderData()
+function ProductPage({props}) {
+    const { data } = useLoaderData();
     const [searchQuery, setSearchQuery] = useState('');
-  
 
-    const filteredData = data.filter(products =>
-        products.title.toLowerCase().includes(searchQuery.toLowerCase())
-
+    const filteredData = data.filter(product =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     useEffect(() => {
-        axios.post("http://localhost:3000/users/verify", {}, { withCredentials: true })
+        axios.post(`${import.meta.env.VITE_API_URL}/users/verify`, {}, { withCredentials: true })
             .then((data) => {
                 console.log("logged in")
             })
@@ -32,7 +30,21 @@ function ProductPage(props) {
     }, [])
 
    
-    console.log(data)
+  
+    const handleAddToCart = async (products) => {
+        try {
+            const userId = '65e4f4abcd720f8ca76196f1'; // Replace with actual user ID
+            await axios.post('http://localhost:3000/cart/add', {
+                userId,
+                productsId: products._id,
+                quantity: 1,
+            });
+            alert('Item added to cart successfully!');
+        } catch (err) {
+            console.error('Error adding item to cart:', err);
+            alert('Failed to add item to cart.');
+        }
+    };
 
 
     return (
@@ -44,20 +56,24 @@ function ProductPage(props) {
 </div>
             <section>
                 <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm-grid-cols-2 gap-6 p-20">
-                    {
-                        filteredData.map((products, index) => {
-                            return <li className="shadow-lg" key={products._id}>
-
-                                <Link to={'/products/' + products._id}>
-                                    <img className="rounded-lg w-72 h-64" src={products.image} />
+                {
+                        filteredData.map((products,index) => (
+                            <li className="shadow-lg" key={products._id}>
+                               
+                                    <img className="rounded-lg w-72 h-64" src={products.image} alt={products.title} />
                                     <h4 className="py-2 text-center text-amber-800">{products.title}</h4>
-                                    <p className="py-2 text-center text-amber-800">{products.price}</p>
-                                    <div className="flex justify-center items-center py-4"><Link to={'/products/' + products._id} className="p-2 rounded-md bg-amber-300 text-amber-800 font-bold">{products.cart}</Link></div>
-
-                                </Link>
-
+                                    <p className="py-2 text-center text-amber-800">${products.price}</p>
+                               
+                                <div className="flex justify-center items-center py-4">
+                                    <button 
+                                     type="button"   className="p-2 rounded-md bg-amber-300 text-amber-800 font-bold"
+                                        onClick={() => handleAddToCart(products)}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                </div>
                             </li>
-                        })
+                        ))
                     }
                 </ul>
             </section>

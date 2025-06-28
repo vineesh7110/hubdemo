@@ -15,7 +15,7 @@ import LoginPage from './routes/Login';
 import HomePage from './routes/Home';
 import store from './app/store'
 import { Provider } from 'react-redux'
-import CartPage,{ loader as CartPageLoader } from './routes/Cart';
+import CartPage from './routes/Cart';
 import ContactPage from './routes/Contact';
 import WholesalePage from './routes/Wholesale';
 import ProcessPage from './routes/Process';
@@ -47,9 +47,9 @@ const router = createBrowserRouter([
         loader: ProductLoader
       },
       {
-        path: '/products/:productsId',
+        path: '/cart',
         element: <CartPage />,
-       loader:CartPageLoader
+       
       },
       {
         path: '/contact',
